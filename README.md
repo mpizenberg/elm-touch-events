@@ -26,7 +26,7 @@ elm-package install mpizenberg/elm-touch-events
 ## Usage
 
 This package provides types and functions to deal with single and multitouch events.
-For example, if you are in need of simple single touch interactions,
+For example, if you are in need of multitouch interactions,
 you may use the following types and functions :
 
 ```elm
@@ -43,15 +43,20 @@ type alias Touch =
     , clientY : Float
     }
 
--- Defined in SingleTouch module: To put somewhere in your model
-type alias SingleTouch =
+-- Defined in MultiTouch module: To put somewhere in your model (or not).
+-- The properties `touches`, `targetTouches` and `changedTouches`
+-- are represented by dictionaries in which the keys are the
+-- unique Int identifier of the Touch interactions.
+type alias MultiTouch =
     { touchType : TouchEvent
-    , touch : Touch
+    , touches : Dict Int Touch
+    , targetTouches : Dict Int Touch
+    , changedTouches : Dict Int Touch
     }
 
--- Defined in SingleTouch module: A simple touch event handler that can be
--- used in views with a msg builder (Touch -> msg)
-onSingleTouch : TouchEvent -> HE.Options -> (Touch -> msg) -> H.Attribute msg
+-- Defined in MultiTouch module: A simple touch event handler that can be
+-- used in views with a msg builder (MultiTouch -> msg)
+onMultiTouch : TouchEvent -> HE.Options -> (MultiTouch -> msg) -> H.Attribute msg
 ```
 
 To try this package, please use a touchscreen platform (mobile, tablet, ...)
