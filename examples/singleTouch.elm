@@ -35,14 +35,14 @@ init =
 
 
 type Msg
-    = SingleTouchMsg TouchEvent Touch
+    = SingleTouchMsg SingleTouch
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SingleTouchMsg touchEvent touch ->
-            ( { model | singleTouch = Just <| SingleTouch touchEvent touch }
+        SingleTouchMsg singleTouch ->
+            ( { model | singleTouch = Just singleTouch }
             , Cmd.none
             )
 
@@ -63,8 +63,8 @@ view model =
 
 onAllTouch : List (H.Attribute Msg)
 onAllTouch =
-    [ onSingleTouch TouchStart Touch.preventAndStop <| SingleTouchMsg TouchStart
-    , onSingleTouch TouchMove Touch.preventAndStop <| SingleTouchMsg TouchMove
-    , onSingleTouch TouchEnd Touch.preventAndStop <| SingleTouchMsg TouchEnd
-    , onSingleTouch TouchCancel Touch.preventAndStop <| SingleTouchMsg TouchEnd
+    [ onSingleTouch TouchStart Touch.preventAndStop <| SingleTouchMsg
+    , onSingleTouch TouchMove Touch.preventAndStop <| SingleTouchMsg
+    , onSingleTouch TouchEnd Touch.preventAndStop <| SingleTouchMsg
+    , onSingleTouch TouchCancel Touch.preventAndStop <| SingleTouchMsg
     ]

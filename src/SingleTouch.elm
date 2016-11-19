@@ -50,7 +50,7 @@ view model =
   H.div [ ST.onSingleTouch T.TouchStart T.preventAndStop <| TouchMsg T.TouchStart ] []
 ```
 -}
-onSingleTouch : TouchEvent -> HE.Options -> (Touch -> msg) -> H.Attribute msg
+onSingleTouch : TouchEvent -> HE.Options -> (SingleTouch -> msg) -> H.Attribute msg
 onSingleTouch touchEvent options msgMaker =
     HE.onWithOptions
         (case touchEvent of
@@ -70,10 +70,9 @@ onSingleTouch touchEvent options msgMaker =
         (Decode.map msgMaker <| singleTouchEventDecoder touchEvent)
 
 
-
--- A touch event (touchstart, touchmove, ...) decoder for only 1 touch
-
-
-singleTouchEventDecoder : TouchEvent -> Decoder Touch
+{-| A touch event (touchstart, touchmove, ...) decoder for only 1 touch.
+-}
+singleTouchEventDecoder : TouchEvent -> Decoder SingleTouch
 singleTouchEventDecoder touchEvent =
-    Decode.map Tuple.second <| Decode.at [ "changedTouches", "0" ] <| touchDecoder
+    Decode.map (SingleTouch touchEvent << Tuple.second)
+        (Decode.at [ "changedTouches", "0" ] <| touchDecoder)
