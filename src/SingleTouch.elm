@@ -3,11 +3,11 @@
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 
-module SingleTouch exposing
-    ( SingleTouch
-    , onSingleTouch
-    )
-
+module SingleTouch
+    exposing
+        ( SingleTouch
+        , onSingleTouch
+        )
 
 {-| This module exposes types and functions
 to deal with simple single touch interactions.
@@ -15,21 +15,14 @@ to deal with simple single touch interactions.
 @docs SingleTouch, onSingleTouch
 -}
 
-
 import Html as H
 import Html.Events as HE
-import Json.Decode as JD exposing ( (:=) )
-
-
-import Touch exposing ( TouchEvent(..), Touch )
-import Touch_private exposing ( touchDecoder )
-
-
+import Json.Decode as Decode exposing (Decoder)
+import Touch exposing (TouchEvent(..), Touch)
+import Touch_private exposing (touchDecoder)
 
 
 -- MODEL #############################################################
-
-
 
 
 {-| A simple type alias for a single touch event.
@@ -41,13 +34,10 @@ type alias SingleTouch =
 
 
 
-
 -- EVENTS HANDLING ###################################################
 
 
-
-
-{-| An single touch event handler.
+{-| A single touch event handler.
 
 ```
 import Touch as T
@@ -64,16 +54,26 @@ onSingleTouch : TouchEvent -> HE.Options -> (Touch -> msg) -> H.Attribute msg
 onSingleTouch touchEvent options msgMaker =
     HE.onWithOptions
         (case touchEvent of
-            TouchStart -> "touchstart"
-            TouchMove -> "touchmove"
-            TouchEnd -> "touchend"
-            TouchCancel -> "touchcancel"
+            TouchStart ->
+                "touchstart"
+
+            TouchMove ->
+                "touchmove"
+
+            TouchEnd ->
+                "touchend"
+
+            TouchCancel ->
+                "touchcancel"
         )
         options
-        (JD.map msgMaker <| singleTouchEventDecoder touchEvent)
+        (Decode.map msgMaker <| singleTouchEventDecoder touchEvent)
+
 
 
 -- A touch event (touchstart, touchmove, ...) decoder for only 1 touch
-singleTouchEventDecoder : TouchEvent -> JD.Decoder Touch
+
+
+singleTouchEventDecoder : TouchEvent -> Decoder Touch
 singleTouchEventDecoder touchEvent =
-    JD.map snd <| JD.at ["changedTouches", "0"] <| touchDecoder
+    Decode.map Tuple.second <| Decode.at [ "changedTouches", "0" ] <| touchDecoder

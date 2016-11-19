@@ -1,15 +1,14 @@
+module Main exposing (..)
+
 import Html as H
-import Html.App as App
 import Html.Attributes as HA
 import Html.Events as HE
-
-
-import Touch exposing ( TouchEvent(..), Touch )
-import SingleTouch exposing ( SingleTouch, onSingleTouch )
+import Touch exposing (TouchEvent(..), Touch)
+import SingleTouch exposing (SingleTouch, onSingleTouch)
 
 
 main =
-    App.program
+    H.program
         { init = init
         , update = update
         , subscriptions = always Sub.none
@@ -18,10 +17,7 @@ main =
 
 
 
-
 -- MODEL #############################################################
-
-
 
 
 type alias Model =
@@ -29,45 +25,39 @@ type alias Model =
     }
 
 
-init : (Model, Cmd Msg)
-init = (Model Nothing, Cmd.none)
-
+init : ( Model, Cmd Msg )
+init =
+    ( Model Nothing, Cmd.none )
 
 
 
 -- UPDATE ############################################################
 
 
-
-
 type Msg
     = SingleTouchMsg TouchEvent Touch
 
 
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SingleTouchMsg touchEvent touch ->
-            ( {model | singleTouch = Just <| SingleTouch touchEvent touch}
+            ( { model | singleTouch = Just <| SingleTouch touchEvent touch }
             , Cmd.none
             )
-
 
 
 
 -- VIEW ##############################################################
 
 
-
-
 view : Model -> H.Html Msg
 view model =
     H.div []
-        [ H.text "Try to touch the image below and watch the model changing."
-        , H.br [] []
+        [ H.p [] [ H.text "Try to touch the image below and watch the model changing." ]
+        , H.p [] [ H.text "(Only works on mobile platforms)" ]
         , H.img ([ HA.src "http://lorempixel.com/600/300/" ] ++ onAllTouch) []
-        , H.br [] []
-        , H.text <| toString model
+        , H.p [] [ H.text <| toString model ]
         ]
 
 

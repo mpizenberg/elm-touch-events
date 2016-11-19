@@ -3,11 +3,11 @@
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 
-module MultiTouch exposing
-    ( MultiTouch
-    , onMultiTouch
-    )
-
+module MultiTouch
+    exposing
+        ( MultiTouch
+        , onMultiTouch
+        )
 
 {-| This module exposes types and functions
 to deal with multitouch interactions.
@@ -15,22 +15,15 @@ to deal with multitouch interactions.
 @docs MultiTouch, onMultiTouch
 -}
 
-
 import Html as H
 import Html.Events as HE
-import Json.Decode as JD exposing ( (:=) )
+import Json.Decode as Decode exposing (Decoder)
 import Dict exposing (Dict)
-
-
-import Touch exposing ( TouchEvent(..), Touch )
-import Touch_private exposing ( touchDecoder )
-
-
+import Touch exposing (TouchEvent(..), Touch)
+import Touch_private exposing (touchDecoder)
 
 
 -- MODEL #############################################################
-
-
 
 
 {-| Type alias for a multitouch event.
@@ -52,10 +45,7 @@ type alias MultiTouch =
 
 
 
-
 -- EVENTS HANDLING ###################################################
-
-
 
 
 {-| An multitouch event handler.
@@ -75,34 +65,32 @@ onMultiTouch : TouchEvent -> HE.Options -> (MultiTouch -> msg) -> H.Attribute ms
 onMultiTouch touchEvent options msgMaker =
     HE.onWithOptions
         (case touchEvent of
-            TouchStart -> "touchstart"
-            TouchMove -> "touchmove"
-            TouchEnd -> "touchend"
-            TouchCancel -> "touchcancel"
+            TouchStart ->
+                "touchstart"
+
+            TouchMove ->
+                "touchmove"
+
+            TouchEnd ->
+                "touchend"
+
+            TouchCancel ->
+                "touchcancel"
         )
         options
-        (JD.map msgMaker <| JD.customDecoder JD.value <| decodeMultiTouch touchEvent)
+        (Decode.map msgMaker <| decodeMultiTouch touchEvent)
 
 
--- Decode a multitouch JS Value into a MultiTouch
-decodeMultiTouch : TouchEvent -> JD.Value -> Result String MultiTouch
-decodeMultiTouch touchEvent value =
-    Result.map4 MultiTouch
-        (Ok touchEvent)
-        (decodeTouchList ["touches"] value)
-        (decodeTouchList ["targetTouches"] value)
-        (decodeTouchList ["changedTouches"] value)
+decodeMultiTouch : TouchEvent -> Decoder MultiTouch
+decodeMultiTouch touchEvent =
+    Decode.map3 (MultiTouch touchEvent)
+        (Decode.at [ "touches" ] touchListDecoder)
+        (Decode.at [ "targetTouches" ] touchListDecoder)
+        (Decode.at [ "changedTouches" ] touchListDecoder)
 
 
--- Decode a TouchList JS Value
-decodeTouchList : List String -> JD.Value -> Result String (Dict Int Touch)
-decodeTouchList touchListPath =
-    JD.decodeValue
-        (JD.at touchListPath touchListDecoder)
-
-
-touchListDecoder : JD.Decoder (Dict Int Touch)
+touchListDecoder : Decoder (Dict Int Touch)
 touchListDecoder =
-    JD.maybe touchDecoder
-        |> JD.dict
-        |> JD.map ( Dict.values >> (List.filterMap identity) >> Dict.fromList )
+    Decode.maybe touchDecoder
+        |> Decode.dict
+        |> Decode.map (Dict.values >> (List.filterMap identity) >> Dict.fromList)

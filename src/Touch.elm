@@ -3,11 +3,12 @@
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 
-module Touch exposing
-    ( TouchEvent(..), Touch
-    , preventAndStop
-    )
-
+module Touch
+    exposing
+        ( TouchEvent(..)
+        , Touch
+        , preventAndStop
+        )
 
 {-| This module exposes types and constants
 common to both single and multi touch interactions.
@@ -15,18 +16,10 @@ common to both single and multi touch interactions.
 @docs TouchEvent, Touch, preventAndStop
 -}
 
-
-import Html as H
 import Html.Events as HE
-import Json.Decode as JD exposing ((:=))
-import Dict exposing (Dict)
-
-
 
 
 -- MODEL #############################################################
-
-
 
 
 {-| The different types of touch events.
@@ -48,10 +41,7 @@ type alias Touch =
 
 
 
-
 -- EVENTS HANDLING ###################################################
-
-
 
 
 {-| Options to prevent default and stop propagation of an event.

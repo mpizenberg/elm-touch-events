@@ -5,32 +5,26 @@
 
 module Touch_private exposing (..)
 
-
 {-| This module exposes internally types and constants
 common to both single and multi touch interactions.
 -}
 
-
-import Json.Decode as JD exposing ( (:=) )
-import Touch exposing ( Touch )
-
-
+import Json.Decode as Decode exposing (Decoder)
+import Touch exposing (Touch)
 
 
 -- EVENTS HANDLING ###################################################
-
-
 
 
 {-| A Touch decoder.
 
 You might only use this in case you want to build your own decoders.
 -}
-touchDecoder : JD.Decoder (Int, Touch)
+touchDecoder : Decoder ( Int, Touch )
 touchDecoder =
-    JD.object2 (,)
-        ("identifier" := JD.int)
-        ( JD.object2 Touch
-            ("clientX" := JD.float)
-            ("clientY" := JD.float)
+    Decode.map2 (,)
+        (Decode.field "identifier" Decode.int)
+        (Decode.map2 Touch
+            (Decode.field "clientX" Decode.float)
+            (Decode.field "clientY" Decode.float)
         )
