@@ -8,10 +8,9 @@ import MultiTouch exposing (MultiTouch, onMultiTouch)
 
 
 main =
-    H.program
-        { init = init
+    H.beginnerProgram
+        { model = init
         , update = update
-        , subscriptions = always Sub.none
         , view = view
         }
 
@@ -25,9 +24,9 @@ type alias Model =
     }
 
 
-init : ( Model, Cmd Msg )
+init : Model
 init =
-    ( Model Nothing, Cmd.none )
+    Model Nothing
 
 
 
@@ -38,13 +37,11 @@ type Msg
     = MultiTouchMsg MultiTouch
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model -> Model
 update msg model =
     case msg of
         MultiTouchMsg multiTouch ->
-            ( { model | multiTouch = Just multiTouch }
-            , Cmd.none
-            )
+            { model | multiTouch = Just multiTouch }
 
 
 

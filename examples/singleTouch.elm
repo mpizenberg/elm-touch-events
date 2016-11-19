@@ -8,10 +8,9 @@ import SingleTouch exposing (SingleTouch, onSingleTouch)
 
 
 main =
-    H.program
-        { init = init
+    H.beginnerProgram
+        { model = init
         , update = update
-        , subscriptions = always Sub.none
         , view = view
         }
 
@@ -25,9 +24,9 @@ type alias Model =
     }
 
 
-init : ( Model, Cmd Msg )
+init : Model
 init =
-    ( Model Nothing, Cmd.none )
+    Model Nothing
 
 
 
@@ -38,13 +37,11 @@ type Msg
     = SingleTouchMsg SingleTouch
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model -> Model
 update msg model =
     case msg of
         SingleTouchMsg singleTouch ->
-            ( { model | singleTouch = Just singleTouch }
-            , Cmd.none
-            )
+            { model | singleTouch = Just singleTouch }
 
 
 
