@@ -5,54 +5,21 @@
 
 module Touch
     exposing
-        ( TouchEvent(..)
-        , Touch
-        , preventAndStop
+        ( Coordinates
         )
 
-{-| This module exposes types and constants
+{-| This module exposes types
 common to both single and multi touch interactions.
 
-@docs TouchEvent, Touch, preventAndStop
+@docs Coordinates
+
 -}
 
-import Html.Events as HE
 
-
--- MODEL #############################################################
-
-
-{-| The different types of touch events.
--}
-type TouchEvent
-    = TouchStart
-    | TouchMove
-    | TouchEnd
-    | TouchCancel
-
-
-{-| A simple type alias for the clientX and clientY properties
+{-| A simple type alias for the clientX and clientY coordinates
 of a JavaScript [Touch](https://developer.mozilla.org/en-US/docs/Web/API/Touch) object.
 -}
-type alias Touch =
+type alias Coordinates =
     { clientX : Float
     , clientY : Float
-    }
-
-
-
--- EVENTS HANDLING ###################################################
-
-
-{-| Options to prevent default and stop propagation of an event.
-
-You might want this options to prevent from emulating mouse events
-if you are developing an interface for both mobile and regular platforms.
-
-You might also need this to prevent from scrolling in a touch interaction.
--}
-preventAndStop : HE.Options
-preventAndStop =
-    { stopPropagation = True
-    , preventDefault = True
     }

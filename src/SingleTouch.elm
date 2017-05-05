@@ -5,74 +5,66 @@
 
 module SingleTouch
     exposing
-        ( SingleTouch
-        , onSingleTouch
+        ( onStart
+        , onMove
+        , onEnd
+        , onCancel
         )
 
-{-| This module exposes types and functions
-to deal with simple single touch interactions.
+{-| This module exposes functions
+to deal with single touch interactions.
 
-@docs SingleTouch, onSingleTouch
+@docs onStart, onMove, onEnd, onCancel
+
 -}
 
-import Html as H
-import Html.Events as HE
+import Html
+import Html.Events as Events
+import Touch
+import Private.Touch
 import Json.Decode as Decode exposing (Decoder)
-import Touch exposing (TouchEvent(..), Touch)
-import Touch_private exposing (touchDecoder)
 
 
--- MODEL #############################################################
-
-
-{-| A simple type alias for a single touch event.
+{-| Triggered on a "touchstart" event.
 -}
-type alias SingleTouch =
-    { touchType : TouchEvent
-    , touch : Touch
-    }
+onStart : (Touch.Coordinates -> msg) -> Html.Attribute msg
+onStart tag =
+    on "touchstart" tag
 
 
-
--- EVENTS HANDLING ###################################################
-
-
-{-| A single touch event handler.
-
-```
-import Touch as T
-import SingleTouch as ST
-
-type Msg
-  = TouchMsg T.TouchEvent T.Touch
-
-view model =
-  H.div [ ST.onSingleTouch T.TouchStart T.preventAndStop <| TouchMsg T.TouchStart ] []
-```
+{-| Triggered on a "touchmove" event.
 -}
-onSingleTouch : TouchEvent -> HE.Options -> (SingleTouch -> msg) -> H.Attribute msg
-onSingleTouch touchEvent options msgMaker =
-    HE.onWithOptions
-        (case touchEvent of
-            TouchStart ->
-                "touchstart"
-
-            TouchMove ->
-                "touchmove"
-
-            TouchEnd ->
-                "touchend"
-
-            TouchCancel ->
-                "touchcancel"
-        )
-        options
-        (Decode.map msgMaker <| singleTouchEventDecoder touchEvent)
+onMove : (Touch.Coordinates -> msg) -> Html.Attribute msg
+onMove tag =
+    on "touchmove" tag
 
 
-{-| A touch event (touchstart, touchmove, ...) decoder for only 1 touch.
+{-| Triggered on a "touchend" event.
 -}
-singleTouchEventDecoder : TouchEvent -> Decoder SingleTouch
-singleTouchEventDecoder touchEvent =
-    Decode.map (SingleTouch touchEvent << Tuple.second)
-        (Decode.at [ "changedTouches", "0" ] <| touchDecoder)
+onEnd : (Touch.Coordinates -> msg) -> Html.Attribute msg
+onEnd tag =
+    on "touchend" tag
+
+
+{-| Triggered on a "touchcancel" event.
+-}
+onCancel : (Touch.Coordinates -> msg) -> Html.Attribute msg
+onCancel tag =
+    on "touchcancel" tag
+
+
+
+-- HELPER FUNCTIONS ##################################################
+
+
+on : String -> (Touch.Coordinates -> msg) -> Html.Attribute msg
+on event tag =
+    Decode.map tag decodeCoordinates
+        |> Events.onWithOptions event Private.Touch.stopOptions
+
+
+decodeCoordinates : Decoder Touch.Coordinates
+decodeCoordinates =
+    Private.Touch.decode
+        |> Decode.at [ "changedTouches", "0" ]
+        |> Decode.map .coordinates

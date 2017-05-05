@@ -3,28 +3,40 @@
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 
-module Touch_private exposing (..)
+module Private.Touch exposing (..)
 
 {-| This module exposes internally types and constants
 common to both single and multi touch interactions.
 -}
 
+import Touch
 import Json.Decode as Decode exposing (Decoder)
-import Touch exposing (Touch)
+import Html.Events
 
 
--- EVENTS HANDLING ###################################################
+type alias Touch =
+    { identifier : Int
+    , coordinates : Touch.Coordinates
+    }
 
 
 {-| A Touch decoder.
 
 You might only use this in case you want to build your own decoders.
+
 -}
-touchDecoder : Decoder ( Int, Touch )
-touchDecoder =
-    Decode.map2 (,)
+decode : Decoder Touch
+decode =
+    Decode.map2 Touch
         (Decode.field "identifier" Decode.int)
-        (Decode.map2 Touch
+        (Decode.map2 Touch.Coordinates
             (Decode.field "clientX" Decode.float)
             (Decode.field "clientY" Decode.float)
         )
+
+
+stopOptions : Html.Events.Options
+stopOptions =
+    { stopPropagation = True
+    , preventDefault = True
+    }
