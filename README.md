@@ -5,7 +5,7 @@
 [badge-license]: https://img.shields.io/badge/license-MPL%202.0-blue.svg?style=flat-square
 [license]: https://www.mozilla.org/en-US/MPL/2.0/
 
-This package aims at handling touch (multitouch) events.
+This package aims at handling single- and multi-touch events.
 
 ## Motivation
 
@@ -27,46 +27,27 @@ elm-package install mpizenberg/elm-touch-events
 
 This package provides types and functions to deal with single and multitouch events.
 For example, if you are in need of multitouch interactions,
-you may use the following types and functions :
+you may use the following functions in your view.
 
 ```elm
--- Defined in Touch module: the type of touch event that can be triggered
-type TouchEvent
-    = TouchStart
-    | TouchMove
-    | TouchEnd
-    | TouchCancel
-
--- Defined in Touch module: a simple type alias to represent a JavaScript Touch object
-type alias Touch =
-    { clientX : Float
-    , clientY : Float
-    }
-
--- Defined in MultiTouch module: To put somewhere in your model (or not).
--- The properties `touches`, `targetTouches` and `changedTouches`
--- are represented by dictionaries in which the keys are the
--- unique Int identifier of the Touch interactions.
-type alias MultiTouch =
-    { touchType : TouchEvent
-    , touches : Dict Int Touch
-    , targetTouches : Dict Int Touch
-    , changedTouches : Dict Int Touch
-    }
-
--- Defined in MultiTouch module: A simple touch event handler that can be
--- used in views with a msg builder (MultiTouch -> msg)
-onMultiTouch : TouchEvent -> HE.Options -> (MultiTouch -> msg) -> H.Attribute msg
+onStart : (Touch.Event -> msg) -> Html.Attribute msg
+onMove : (Touch.Event -> msg) -> Html.Attribute msg
+onEnd : (Touch.Event -> msg) -> Html.Attribute msg
 ```
 
-To try this package, please use a touchscreen platform (mobile, tablet, ...)
+To try this package, please use a touch device (mobile, tablet, ...)
 since mouses do not generate touch interactions.
 
-You can find a complete very simple example of a single touch interaction
-in the file `examples/singleTouch.elm`.
+You can find a complete simple example of a single touch interaction
+in the file `examples/SingleTouch/Main.elm`.
+A multitouch example is also available in `examples/MultiTouch/Main.elm`.
+To test those, you can use the following command in their respective dir,
+and then open the `index.html` in your browser with mobile emulation
+activated.
 
-For a complete multitouch example, please refer to the file
-`examples/multiTouch.elm`.
+```shell
+elm-make Main.elm --output Main.js
+```
 
 ## Documentation
 
