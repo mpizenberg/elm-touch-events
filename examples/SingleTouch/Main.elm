@@ -31,10 +31,10 @@ type alias Model =
 
 type TouchEvent
     = None
-    | Start Touch.Coordinates
-    | Move Touch.Coordinates
-    | End Touch.Coordinates
-    | Cancel Touch.Coordinates
+    | Start ( Float, Float )
+    | Move ( Float, Float )
+    | End ( Float, Float )
+    | Cancel ( Float, Float )
 
 
 model : Model
@@ -57,16 +57,16 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         TouchStart coordinates ->
-            Model (Start coordinates)
+            Model (Start <| Touch.clientPos coordinates)
 
         TouchMove coordinates ->
-            Model (Move coordinates)
+            Model (Move <| Touch.clientPos coordinates)
 
         TouchEnd coordinates ->
-            Model (End coordinates)
+            Model (End <| Touch.clientPos coordinates)
 
         TouchCancel coordinates ->
-            Model (Cancel coordinates)
+            Model (Cancel <| Touch.clientPos coordinates)
 
 
 
