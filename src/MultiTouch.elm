@@ -23,6 +23,7 @@ import Html
 import Html.Events as Events
 import Touch
 import Private.Touch exposing (Touch)
+import Private.Decode
 import Json.Decode as Decode exposing (Decoder)
 import Dict exposing (Dict)
 
@@ -86,23 +87,25 @@ on event tag =
 decodeMultiTouch : Decoder Event
 decodeMultiTouch =
     Decode.map3 Event
-        (Decode.field "changedTouches" decodeTouches)
-        (Decode.field "targetTouches" decodeTouches)
-        (Decode.field "touches" decodeTouches)
+        (Decode.field "changedTouches" decodeTouchList)
+        (Decode.field "targetTouches" decodeTouchList)
+        (Decode.field "touches" decodeTouchList)
 
 
-decodeTouches : Decoder (Dict Int Touch.Coordinates)
-decodeTouches =
-    Decode.maybe Private.Touch.decode
-        |> Decode.dict
-        |> Decode.map (Dict.values >> filterTouches >> Dict.fromList)
+decodeTouchList : Decoder (Dict Int Touch.Coordinates)
+decodeTouchList =
+    Decode.field "length" Decode.int
+        |> Decode.andThen decodeTouches
 
 
-filterTouches : List (Maybe Touch) -> List ( Int, Touch.Coordinates )
-filterTouches =
-    List.filterMap (Maybe.map touchTuple)
+decodeTouches : Int -> Decoder (Dict Int Touch.Coordinates)
+decodeTouches nbTouches =
+    List.range 0 (nbTouches - 1)
+        |> List.map (decodeTouch >> Decode.map Private.Touch.toTuple)
+        |> Private.Decode.all
+        |> Decode.map Dict.fromList
 
 
-touchTuple : Touch -> ( Int, Touch.Coordinates )
-touchTuple touch =
-    ( touch.identifier, touch.coordinates )
+decodeTouch : Int -> Decoder Touch
+decodeTouch n =
+    Decode.field (toString n) Private.Touch.decode

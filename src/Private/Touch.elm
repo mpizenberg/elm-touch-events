@@ -20,11 +20,11 @@ type alias Touch =
     }
 
 
-{-| A Touch decoder.
+toTuple : Touch -> ( Int, Touch.Coordinates )
+toTuple touch =
+    ( touch.identifier, touch.coordinates )
 
-You might only use this in case you want to build your own decoders.
 
--}
 decode : Decoder Touch
 decode =
     Decode.map2 Touch
