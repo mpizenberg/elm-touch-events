@@ -55,17 +55,17 @@ type Msg
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        TouchStart coordinates ->
-            Model (Start coordinates)
+        TouchStart event ->
+            Model (Start event)
 
-        TouchMove coordinates ->
-            Model (Move coordinates)
+        TouchMove event ->
+            Model (Move event)
 
-        TouchEnd coordinates ->
-            Model (End coordinates)
+        TouchEnd event ->
+            Model (End event)
 
-        TouchCancel coordinates ->
-            Model (Cancel coordinates)
+        TouchCancel event ->
+            Model (Cancel event)
 
 
 
