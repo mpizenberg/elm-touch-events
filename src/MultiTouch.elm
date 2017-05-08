@@ -5,17 +5,16 @@
 
 module MultiTouch
     exposing
-        ( Event
-        , onStart
+        ( onStart
         , onMove
         , onEnd
         , onCancel
         )
 
-{-| This module exposes types and functions
+{-| This module exposes functions
 to deal with multitouch interactions.
 
-@docs Event, onStart, onMove, onEnd, onCancel
+@docs onStart, onMove, onEnd, onCancel
 
 -}
 
@@ -28,47 +27,30 @@ import Json.Decode as Decode exposing (Decoder)
 import Dict exposing (Dict)
 
 
-{-| Type alias for a multitouch event.
-
-The properties `touches`, `targetTouches` and `changedTouches`
-are represented by dictionaries in which the keys are the
-unique Int identifier of the touch interactions.
-
-To have more info about these properties and how to use them,
-please refer to the [Mozilla documentation](https://developer.mozilla.org/en-US/docs/Web/Events/touchstart)
-
--}
-type alias Event =
-    { changedTouches : Dict Int Touch.Coordinates
-    , targetTouches : Dict Int Touch.Coordinates
-    , touches : Dict Int Touch.Coordinates
-    }
-
-
 {-| Triggered on a "touchstart" event.
 -}
-onStart : (Event -> msg) -> Html.Attribute msg
+onStart : (Touch.Event -> msg) -> Html.Attribute msg
 onStart tag =
     on "touchstart" tag
 
 
 {-| Triggered on a "touchmove" event.
 -}
-onMove : (Event -> msg) -> Html.Attribute msg
+onMove : (Touch.Event -> msg) -> Html.Attribute msg
 onMove tag =
     on "touchmove" tag
 
 
 {-| Triggered on a "touchend" event.
 -}
-onEnd : (Event -> msg) -> Html.Attribute msg
+onEnd : (Touch.Event -> msg) -> Html.Attribute msg
 onEnd tag =
     on "touchend" tag
 
 
 {-| Triggered on a "touchcancel" event.
 -}
-onCancel : (Event -> msg) -> Html.Attribute msg
+onCancel : (Touch.Event -> msg) -> Html.Attribute msg
 onCancel tag =
     on "touchcancel" tag
 
@@ -77,15 +59,15 @@ onCancel tag =
 -- HELPER FUNCTIONS ##################################################
 
 
-on : String -> (Event -> msg) -> Html.Attribute msg
+on : String -> (Touch.Event -> msg) -> Html.Attribute msg
 on event tag =
-    Decode.map tag decodeMultiTouch
+    Decode.map tag decodeTouchEvent
         |> Events.onWithOptions event Private.Touch.stopOptions
 
 
-decodeMultiTouch : Decoder Event
-decodeMultiTouch =
-    Decode.map3 Event
+decodeTouchEvent : Decoder Touch.Event
+decodeTouchEvent =
+    Decode.map3 Private.Touch.Event
         (Decode.field "changedTouches" decodeTouchList)
         (Decode.field "targetTouches" decodeTouchList)
         (Decode.field "touches" decodeTouchList)

@@ -11,6 +11,14 @@ common to both single and multi touch interactions.
 
 import Json.Decode as Decode exposing (Decoder)
 import Html.Events
+import Dict exposing (Dict)
+
+
+type alias Event =
+    { changedTouches : Dict Int Coordinates
+    , targetTouches : Dict Int Coordinates
+    , touches : Dict Int Coordinates
+    }
 
 
 type alias Touch =
