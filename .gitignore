@@ -3,6 +3,7 @@ elm-stuff/
 repl-temp-*
 index.html
 Main.js
+documentation.json
 
 # temporary files
 *.swp
