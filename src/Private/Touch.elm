@@ -9,18 +9,23 @@ module Private.Touch exposing (..)
 common to both single and multi touch interactions.
 -}
 
-import Touch
 import Json.Decode as Decode exposing (Decoder)
 import Html.Events
 
 
 type alias Touch =
     { identifier : Int
-    , coordinates : Touch.Coordinates
+    , coordinates : Coordinates
     }
 
 
-toTuple : Touch -> ( Int, Touch.Coordinates )
+type alias Coordinates =
+    { clientX : Float
+    , clientY : Float
+    }
+
+
+toTuple : Touch -> ( Int, Coordinates )
 toTuple touch =
     ( touch.identifier, touch.coordinates )
 
@@ -29,7 +34,7 @@ decode : Decoder Touch
 decode =
     Decode.map2 Touch
         (Decode.field "identifier" Decode.int)
-        (Decode.map2 Touch.Coordinates
+        (Decode.map2 Coordinates
             (Decode.field "clientX" Decode.float)
             (Decode.field "clientY" Decode.float)
         )

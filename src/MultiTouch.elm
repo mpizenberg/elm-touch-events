@@ -35,8 +35,7 @@ are represented by dictionaries in which the keys are the
 unique Int identifier of the touch interactions.
 
 To have more info about these properties and how to use them,
-please refer to the [Mozilla documentation]
-(<https://developer.mozilla.org/en-US/docs/Web/Events/touchstart>)
+please refer to the [Mozilla documentation](https://developer.mozilla.org/en-US/docs/Web/Events/touchstart)
 
 -}
 type alias Event =

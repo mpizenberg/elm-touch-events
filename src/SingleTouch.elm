@@ -14,6 +14,16 @@ module SingleTouch
 {-| This module exposes functions
 to deal with single touch interactions.
 
+The coordinates provided are the ones of the first touch in the
+["changedTouches"](https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent)
+touch list.
+As a consequence, it may behave inconsistently
+in case of an accidental multitouch usage.
+In case of a need for consistency with potential
+unwanted multitouch interactions,
+you might want to use the `MultiTouch` module which provides
+finer grained control over the processing of the touch event.
+
 @docs onStart, onMove, onEnd, onCancel
 
 -}
