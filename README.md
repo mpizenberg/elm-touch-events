@@ -5,7 +5,7 @@
 [badge-license]: https://img.shields.io/badge/license-MPL%202.0-blue.svg?style=flat-square
 [license]: https://www.mozilla.org/en-US/MPL/2.0/
 
-This package aims at handling single- and multi-touch events.
+This package aims at handling single and multitouch events.
 
 ## Motivation
 
