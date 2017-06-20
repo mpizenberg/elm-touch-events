@@ -6,6 +6,7 @@ Compile using `elm-make Main.elm --output Main.js`
 
 -}
 
+import Touch
 import MultiTouch
 import Html exposing (..)
 import Html.Attributes as HtmlA
@@ -30,10 +31,10 @@ type alias Model =
 
 type TouchEvent
     = None
-    | Start MultiTouch.Event
-    | Move MultiTouch.Event
-    | End MultiTouch.Event
-    | Cancel MultiTouch.Event
+    | Start Touch.Event
+    | Move Touch.Event
+    | End Touch.Event
+    | Cancel Touch.Event
 
 
 model : Model
@@ -46,10 +47,10 @@ model =
 
 
 type Msg
-    = TouchStart MultiTouch.Event
-    | TouchMove MultiTouch.Event
-    | TouchEnd MultiTouch.Event
-    | TouchCancel MultiTouch.Event
+    = TouchStart Touch.Event
+    | TouchMove Touch.Event
+    | TouchEnd Touch.Event
+    | TouchCancel Touch.Event
 
 
 update : Msg -> Model -> Model
