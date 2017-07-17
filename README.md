@@ -17,6 +17,18 @@ to do it.
 Unfortunately it would not work on tablets (that are best fitted for this study).
 So here I am, rolling up my sleeves to create a package handling multitouch events.
 
+## Want to contribute?
+
+I tried to make this package idiomatic and simple to use,
+especially since version 3.0 (previous were a bit tedious to use).
+However, if you have difficulties using it, or ideas to improve this,
+don't hesitate to reach me on slack (mattpiz) and to use github issues.
+
+One thing that would be very nice,
+is trying to build a gestures package (swipe, pinch, ...) on top of this.
+I don't have time or use case for now,
+but if you're interested in doing so, let me know!
+
 ## Installation
 
 ```bash
