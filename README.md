@@ -5,6 +5,11 @@
 [badge-license]: https://img.shields.io/badge/license-MPL%202.0-blue.svg?style=flat-square
 [license]: https://www.mozilla.org/en-US/MPL/2.0/
 
+> WARNING: this package is being merged into [elm-pointer-events].
+> It won't be updated to 0.19
+
+[elm-pointer-events]: https://github.com/mpizenberg/elm-pointer-events
+
 This package aims at handling single and multitouch events.
 
 ## Motivation
