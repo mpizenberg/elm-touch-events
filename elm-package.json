@@ -1,6 +1,6 @@
 {
-    "version": "3.0.1",
-    "summary": "Handle multitouch events",
+    "version": "3.0.2",
+    "summary": "DEPRECATED and merged into elm-pointer-events",
     "repository": "https://github.com/mpizenberg/elm-touch-events.git",
     "license": "MPL-2.0",
     "source-directories": [
